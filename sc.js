@@ -53,7 +53,7 @@ function f(x) {
 //    return x.split(/(?:;,| )+/);
     let a = removeUnwantedSpace(x);
     dump(a);
-    let b = a.split(/[;,|\r\n]+/);
+    let b = a.split(/[;,|\r\n#]+/);
     dump(b);
     let c = b.map(item => item.trim());
     dump(c);

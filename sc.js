@@ -25,7 +25,7 @@ function updateHashtag() {
 
 function textToHashtag(x) {
     let a = removeUnwantedSpace(x);
-    let b = a.split(/[;,|\r\n]+/);
+    let b = a.split(/[;,|\r\n]+/g);
     let c = b.map(item => item.trim());
     let d = removeEmptyElements(c);
     let e = d.map(t => removeSpaces(t));
@@ -39,7 +39,7 @@ function removeUnwantedSpace(x) {
 }
 
 function removeDuplicateSpaces(x) {
-    return x.replace(/ +(?= )/, '');
+    return x.replace(/ +(?= )/g, '');
 }
 
 function splitGroups(x) {

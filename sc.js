@@ -3,7 +3,7 @@ let dev = true;
 let requestParameter = get("p");
 
 if (typeof requestParameter !== 'undefined') {
-    debug("request parameters are exist")
+    debug("request parameters are exist");
     let srcTextEl = getById("srcText");
     srcTextEl.textContent = requestParameter;
 }
@@ -110,8 +110,10 @@ function copyTextToClipboard(text) {
 }
 
 function get(name) {
-    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+    name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search);
+    if (name) {
         return decodeURIComponent(name[1]);
+    }
 }
 
 function removeDuplicates(x) {
@@ -124,7 +126,7 @@ function isEqualArrays(x, y) {
 
 function test() {
     if (dev) {
-        debug("start test")
+        debug("start test");
         assert(true);
         assert(isEqualArrays([1, 5, 6], [1, 5, 6]));
         assert(isEqualArrays(removeDuplicates([1, 6, 5, 6, 5, 1]), [1, 6, 5]));
@@ -133,6 +135,6 @@ function test() {
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
         assert(textToHashtag(testData) === "#ПШ | #Границаовала | #3 | #41 | #2 | #5 | #7 | #4");
-        debug("finish test")
+        debug("finish test");
     }
 }

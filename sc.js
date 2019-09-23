@@ -1,32 +1,39 @@
 "use strict";
-
+let dev = true;
 let requestParameter = get("p");
+
 if (typeof requestParameter !== 'undefined') {
-    dump("!!");
+    debug("request parameters are exist")
     let srcTextEl = getById("srcText");
     srcTextEl.textContent = requestParameter;
 }
 
+test();
+
 function updateHashtag() {
     let srcTextEl = getById("srcText");
-    dump(srcTextEl.value);
-    
-    //srcTextEl.value = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
-
     let srcText = srcTextEl.value;
-    let t = f(srcText);
+    let t = textToHashtag(srcText);
     let dstTextEl = getById("dstText");
     dstTextEl.textContent = t;
     copyTextToClipboard(t);
-
-    dump(get('p'));
 }
 function dump(x) {
     console.log(JSON.stringify(x));
 }
 
+function debug(x) {
+    if (dev) {
+        dump(x);
+    }
+}
+
 function print(x) {
     console.log(x);
+}
+
+function assert(x) {
+    console.assert(x, x);
 }
 
 function getById(x) {
@@ -34,7 +41,7 @@ function getById(x) {
 }
 
 function removeDuplicateSpaces(x) {
-    return x.replace(/ +(?= )/g, '');
+    return x.replace(/ +(?= )/, '');
 }
 
 function removeUnwantedSpace(x) {
@@ -49,22 +56,18 @@ function format(x) {
     return removeUnwantedSpace(replaceLinebreaks(x, ","));
 }
 
-function f(x) {
-//    return x.split(/(?:;,| )+/);
+function textToHashtag(x) {
     let a = removeUnwantedSpace(x);
-    dump(a);
-    let b = a.split(/[;,|\r\n#]+/);
-    dump(b);
+    let b = a.split(/[;,|\r\n]+/);
     let c = b.map(item => item.trim());
-    dump(c);
     let d = removeEmptyElements(c);
-    dump(d);
     let f = d.map(e => removeSpaces(e));
-    dump(f);
-    dump(addHashtag(f));
-    dump(wordListToHashTags(f));
     let g = wordListToHashTags(f);
     return g;
+}
+
+function splitGroups(x) {
+    return x.split(/[;,|\r\n]+/g);
 }
 
 function removeEmptyElements(x) {
@@ -75,8 +78,8 @@ function addHashtag(x) {
     return x.map(e => "#" + e);
 }
 
-function wordListToHashTags(x) {
-    return  addHashtag(x).join(" | ");
+function wordListToHashTags(x, delimiter = " | ") {
+    return addHashtag(x).join(delimiter);
 }
 
 function copyTextToClipboard(text) {
@@ -98,9 +101,9 @@ function copyTextToClipboard(text) {
     try {
         let successful = document.execCommand('copy');
         let msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Copying text command was ' + msg);
+        debug('Copying text command was ' + msg);
     } catch (err) {
-        console.log('Oops, unable to copy');
+        debug('Oops, unable to copy');
     }
     document.body.removeChild(textArea);
 }
@@ -110,10 +113,25 @@ function get(name) {
         return decodeURIComponent(name[1]);
 }
 
-//function getStrings(x) {
-//    return x.split(/[\s,]+/);
-//}
+function removeDuplicates(x) {
+    return [...new Set(x)];
+}
 
-//function replaceLinebreaks(s, delimiter) {
-//    return s.replace(/[\r\n]+/gm, delimiter);
-//}
+function isEqualArrays(x, y) {
+    return (JSON.stringify(x) === JSON.stringify(y));
+}
+
+function test() {
+    if (dev) {
+        debug("start test")
+        assert(true);
+        assert(isEqualArrays([1, 5, 6], [1, 5, 6]));
+        assert(isEqualArrays(removeDuplicates([1, 6, 5, 6, 5, 1]), [1, 6, 5]));
+        assert(isEqualArrays(removeDuplicates(["пш", 6, 5, "пш", 5, "кот"]), ["пш", 6, 5, "кот"]));
+        assert(wordListToHashTags(["Ток", "кот", "2019"]) === "#Ток | #кот | #2019");
+        let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
+        assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
+        assert(textToHashtag(testData) === "#ПШ | #Границаовала | #3 | #41 | #2 | #5 | #7 | #4");
+        debug("finish test")
+    }
+}

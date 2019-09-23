@@ -1,14 +1,18 @@
 "use strict";
+
 let dev = true;
-let requestParameter = get("p");
-
-if (typeof requestParameter !== 'undefined') {
-    debug("request parameters are exist");
-    let srcTextEl = getById("srcText");
-    srcTextEl.textContent = requestParameter;
-}
-
 test();
+
+fillSrcTextByUrlParams();
+
+function fillSrcTextByUrlParams() {
+    let requestParameter = get("p");
+    if (typeof requestParameter !== 'undefined') {
+        debug("request parameters are exist");
+        let srcTextEl = getById("srcText");
+        srcTextEl.textContent = requestParameter;
+    }
+}
 
 function updateHashtag() {
     let srcTextEl = getById("srcText");
@@ -17,43 +21,6 @@ function updateHashtag() {
     let dstTextEl = getById("dstText");
     dstTextEl.textContent = t;
     copyTextToClipboard(t);
-}
-function dump(x) {
-    console.log(JSON.stringify(x));
-}
-
-function debug(x) {
-    if (dev) {
-        dump(x);
-    }
-}
-
-function print(x) {
-    console.log(x);
-}
-
-function assert(x) {
-    console.assert(x, x);
-}
-
-function getById(x) {
-    return document.getElementById(x);
-}
-
-function removeDuplicateSpaces(x) {
-    return x.replace(/ +(?= )/, '');
-}
-
-function removeUnwantedSpace(x) {
-    return removeDuplicateSpaces(x).trim();
-}
-
-function removeSpaces(x) {
-    return x.replace(/ /g, '');
-}
-
-function format(x) {
-    return removeUnwantedSpace(replaceLinebreaks(x, ","));
 }
 
 function textToHashtag(x) {
@@ -65,6 +32,14 @@ function textToHashtag(x) {
     let f = removeDuplicates(e);
     let g = wordListToHashTags(f);
     return g;
+}
+
+function removeUnwantedSpace(x) {
+    return removeDuplicateSpaces(x).trim();
+}
+
+function removeDuplicateSpaces(x) {
+    return x.replace(/ +(?= )/, '');
 }
 
 function splitGroups(x) {
@@ -81,6 +56,53 @@ function addHashtag(x) {
 
 function wordListToHashTags(x, delimiter = " | ") {
     return addHashtag(x).join(delimiter);
+}
+
+//Base methods
+
+/**
+ * Получить параметр из utl
+ * @param {string} name имя параметра
+ * @returns {string}
+ */
+function get(name) {
+    name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search);
+    if (name) {
+        return decodeURIComponent(name[1]);
+    }
+}
+
+/**
+ * Получить объект по id
+ * @param {string} x id
+ * @returns {Element}
+ */
+function getById(x) {
+    return document.getElementById(x);
+}
+
+function removeDuplicates(x) {
+    return [...new Set(x)];
+}
+
+function removeSpaces(x) {
+    return x.replace(/ /g, '');
+}
+
+function isEqualArrays(x, y) {
+    return (JSON.stringify(x) === JSON.stringify(y));
+}
+
+function print(x) {
+    console.log(x);
+}
+
+function assert(x) {
+    console.assert(x, x);
+}
+
+function dump(x) {
+    console.log(JSON.stringify(x));
 }
 
 function copyTextToClipboard(text) {
@@ -109,21 +131,15 @@ function copyTextToClipboard(text) {
     document.body.removeChild(textArea);
 }
 
-function get(name) {
-    name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search);
-    if (name) {
-        return decodeURIComponent(name[1]);
+function debug(x) {
+    if (dev) {
+        dump(x);
     }
 }
 
-function removeDuplicates(x) {
-    return [...new Set(x)];
-}
-
-function isEqualArrays(x, y) {
-    return (JSON.stringify(x) === JSON.stringify(y));
-}
-
+/**
+ * Test
+ */
 function test() {
     if (dev) {
         debug("start test");

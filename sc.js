@@ -61,7 +61,8 @@ function textToHashtag(x) {
     let b = a.split(/[;,|\r\n]+/);
     let c = b.map(item => item.trim());
     let d = removeEmptyElements(c);
-    let f = d.map(e => removeSpaces(e));
+    let e = d.map(t => removeSpaces(t));
+    let f = removeDuplicates(e);
     let g = wordListToHashTags(f);
     return g;
 }

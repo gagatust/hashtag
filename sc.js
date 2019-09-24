@@ -24,7 +24,8 @@ function updateHashtag() {
 }
 
 function textToHashtag(x) {
-    let a = removeUnwantedSpace(x);
+    let y = x.replace(/\-/g, ' ');
+    let a = removeUnwantedSpace(y);
     let b = removeSpecialChars(a);
     let c = splitGroups(b);
     let d = c.map(item => item.trim());
@@ -161,31 +162,46 @@ function debug(x) {
 function test() {
     if (dev) {
         debug("start test");
+
         assert(true);
         assert(isEqualArrays([1, 5, 6], [1, 5, 6]));
+
         assert(isEqualArrays(removeDuplicates([1, 6, 5, 6, 5, 1]), [1, 6, 5]));
         assert(isEqualArrays(removeDuplicates(["пш", 6, 5, "пш", 5, "кот"]), ["пш", 6, 5, "кот"]));
+
         assert(wordListToHashTags(["Ток", "кот", "2019"]) === "#Ток | #кот | #2019");
+
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         let testData2 = " ПШ,  Граница  овала , мир ;  ток    мой    \n2  , я ,,  ,он , кто";
         let testResult = "#ПШ | #ГраницаОвала";
         let testResult2 = "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто";
+        let testResult3 = "#УланУдэ | #КомсомольскНаАмуре | #НижнийТагил | #РостовНаДону | #МинеральныеВоды";
+
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
         assert(isEqualArrays(splitGroups(testResult), ["", "ПШ ", " ", "ГраницаОвала"]));
         assert(isEqualArrays(splitGroups(testResult2), ["", "ПШ ", " ", "ГраницаОвала ", " ", "Мир ", " ", "ТокМой ", " ", "Я ", " ", "Он ", " ", "Кто"]));
+
         assert(textToHashtag(testData) === testResult);
         assert(textToHashtag(testData2) === testResult2);
         assert(textToHashtag(testResult) === testResult);
         assert(textToHashtag(testResult2) === testResult2);
-        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdff|asd sdf  d#sdf  fg  #  ; , ds. dfg");
+        assert(textToHashtag("улан-удэ, комсомольск-на-амуре, нижний тагил, ростов-на-Дону, минеральные Воды") === testResult3);
+        assert(textToHashtag("Улан-Удэ, Комсомольск-на-Амуре, Нижний Тагил, Ростов-на-Дону, Минеральные Воды") === testResult3);
+
+        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg")
+                === "sd fda adfd@35sdff|asd sdf  d#sdf  fg  #  ; , ds. dfg");
+
         assert(toCamelCase("новый год ") === "НовыйГод");
         assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");
         assert(toCamelCase("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");
-        assert(toCamelCase(" иркутск  и иркутская область   ключевые   слова\t должны быть ") === "ИркутскИИркутскаяОбластьКлючевыеСловаДолжныБыть");
+        assert(toCamelCase(" иркутск  и иркутская область   ключевые   слова\t должны быть ") 
+                === "ИркутскИИркутскаяОбластьКлючевыеСловаДолжныБыть");
+
         assert(removeStartedWithNumer("программа") === "программа");
         assert(removeStartedWithNumer("123") === "");
         assert(removeStartedWithNumer("123программа") === "");
         assert(removeStartedWithNumer("программа123") === "программа123");
+
         debug("finish test");
     }
 }

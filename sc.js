@@ -49,7 +49,7 @@ function removeStartedWithNumer(x) {
 }
 
 function splitGroups(x) {
-    return x.split(/[;,|\r\n]+/g);
+    return x.split(/[;,#\r\n]+/g);
 }
 
 function removeEmptyElements(x) {
@@ -104,7 +104,7 @@ function toCamelCase(str) {
 }
 
 function removeSpecialChars(x) {
-    return x.replace(/[!?#$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
+    return x.replace(/[!?$%&~<>`'":=\|\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
 }
 
 function isEqualArrays(x, y) {
@@ -171,13 +171,13 @@ function test() {
         let testResult = "#ПШ | #ГраницаОвала";
         let testResult2 = "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто";
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
-        assert(isEqualArrays(splitGroups(testResult), ["#ПШ ", " #ГраницаОвала"]));
-        assert(isEqualArrays(splitGroups(testResult2), ["#ПШ ", " #ГраницаОвала ", " #Мир ", " #ТокМой ", " #Я ", " #Он ", " #Кто"]));
+        assert(isEqualArrays(splitGroups(testResult), ["", "ПШ | ", "ГраницаОвала"]));
+        assert(isEqualArrays(splitGroups(testResult2), ["", "ПШ | ", "ГраницаОвала | ", "Мир | ", "ТокМой | ", "Я | ", "Он | ", "Кто"]));
         assert(textToHashtag(testData) === testResult);
         assert(textToHashtag(testData2) === testResult2);
         assert(textToHashtag(testResult) === testResult);
         assert(textToHashtag(testResult2) === testResult2);
-        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdff|asd sdf  dsdf  fg    ; , ds. dfg");
+        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdffasd sdf  d#sdf  fg  #  ; , ds. dfg");
         assert(toCamelCase("новый год ") === "НовыйГод");
         assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");
         assert(toCamelCase("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");

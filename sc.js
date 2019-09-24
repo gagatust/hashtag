@@ -1,6 +1,6 @@
 "use strict";
 
-let dev = true;
+let dev = false;
 test();
 
 fillSrcTextByUrlParams();

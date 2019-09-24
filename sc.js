@@ -25,6 +25,8 @@ function updateHashtag() {
 
 function textToHashtag(x) {
     let a = removeUnwantedSpace(x);
+    let m = removeSpecialChars(a);
+    a = m;
     let b = a.split(/[;,|\r\n]+/g);
     let c = b.map(item => item.trim());
     let d = removeEmptyElements(c);
@@ -86,7 +88,11 @@ function removeDuplicates(x) {
 }
 
 function removeSpaces(x) {
-    return x.replace(/ /g, '');
+    return x.replace(/[ \t]/g, '');
+}
+
+function removeSpecialChars(x) {
+    return x.replace(/[!?#$%&~<>`'":=\|\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
 }
 
 function isEqualArrays(x, y) {
@@ -151,6 +157,7 @@ function test() {
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
         assert(textToHashtag(testData) === "#ПШ | #Границаовала | #3 | #41 | #2 | #5 | #7 | #4");
+        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdffasd sdf  dsdf  fg    ; , ds. dfg");
         debug("finish test");
     }
 }

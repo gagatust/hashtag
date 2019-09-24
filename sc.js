@@ -91,6 +91,14 @@ function removeSpaces(x) {
     return x.replace(/[ \t]/g, '');
 }
 
+function toCamelCase(str) {
+    return str
+            .replace(/./, x => x.toUpperCase())
+            .replace(/\s+./g, x => x.toUpperCase())
+            .replace(/\s/g, '');
+
+}
+
 function removeSpecialChars(x) {
     return x.replace(/[!?#$%&~<>`'":=\|\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
 }
@@ -158,6 +166,10 @@ function test() {
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
         assert(textToHashtag(testData) === "#ПШ | #Границаовала | #3 | #41 | #2 | #5 | #7 | #4");
         assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdffasd sdf  dsdf  fg    ; , ds. dfg");
+        assert(toCamelCase("новый год ") === "НовыйГод");
+        assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");
+        assert(toCamelCase("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");
+        assert(toCamelCase(" иркутск  и иркутская область   ключевые   слова\t должны быть ") === "ИркутскИИркутскаяОбластьКлючевыеСловаДолжныБыть");
         debug("finish test");
     }
 }

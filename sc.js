@@ -25,16 +25,15 @@ function updateHashtag() {
 
 function textToHashtag(x) {
     let a = removeUnwantedSpace(x);
-    let m = removeSpecialChars(a);
-    a = m;
-    let b = a.split(/[;,.|\r\n]+/g);
-    let c = b.map(item => item.trim());
-    let c2 = c.map(item => removeStartedWithNumer(item));
-    let d = removeEmptyElements(c2);
-    let e = d.map(t => toCamelCase(t));
-    let f = removeDuplicates(e);
-    let g = wordListToHashTags(f);
-    return g;
+    let b = removeSpecialChars(a);
+    let c = splitGroups(b);
+    let d = c.map(item => item.trim());
+    let e = d.map(item => removeStartedWithNumer(item));
+    let f = removeEmptyElements(e);
+    let g = f.map(t => toCamelCase(t));
+    let h = removeDuplicates(g);
+    let i = wordListToHashTags(h);
+    return i;
 }
 
 function removeUnwantedSpace(x) {
@@ -170,19 +169,18 @@ function test() {
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         let testData2 = " ПШ,  Граница  овала , мир ;  ток    мой    \n2  , я ,,  ,он , кто";
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
-        debug(textToHashtag(testData));
-        debug(textToHashtag(testData2));
         assert(textToHashtag(testData) === "#ПШ | #ГраницаОвала");
         assert(textToHashtag(testData2) === "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто");
+        debug(textToHashtag("#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто"));
         assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdffasd sdf  dsdf  fg    ; , ds. dfg");
         assert(toCamelCase("новый год ") === "НовыйГод");
         assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");
         assert(toCamelCase("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");
         assert(toCamelCase(" иркутск  и иркутская область   ключевые   слова\t должны быть ") === "ИркутскИИркутскаяОбластьКлючевыеСловаДолжныБыть");
-        debug(removeStartedWithNumer("программа"));
-        debug(removeStartedWithNumer("123"));
-        debug(removeStartedWithNumer("123программа"));
-        debug(removeStartedWithNumer("программа123"));
+        assert(removeStartedWithNumer("программа") === "программа");
+        assert(removeStartedWithNumer("123") === "");
+        assert(removeStartedWithNumer("123программа") === "");
+        assert(removeStartedWithNumer("программа123") === "программа123");
         debug("finish test");
     }
 }

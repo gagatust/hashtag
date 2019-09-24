@@ -104,7 +104,7 @@ function toCamelCase(str) {
 }
 
 function removeSpecialChars(x) {
-    return x.replace(/[!?#$%&~<>`'":=\|\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
+    return x.replace(/[!?#$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
 }
 
 function isEqualArrays(x, y) {
@@ -168,11 +168,16 @@ function test() {
         assert(wordListToHashTags(["Ток", "кот", "2019"]) === "#Ток | #кот | #2019");
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         let testData2 = " ПШ,  Граница  овала , мир ;  ток    мой    \n2  , я ,,  ,он , кто";
+        let testResult = "#ПШ | #ГраницаОвала";
+        let testResult2 = "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто";
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
-        assert(textToHashtag(testData) === "#ПШ | #ГраницаОвала");
-        assert(textToHashtag(testData2) === "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто");
-        debug(textToHashtag("#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто"));
-        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdffasd sdf  dsdf  fg    ; , ds. dfg");
+        assert(isEqualArrays(splitGroups(testResult), ["#ПШ ", " #ГраницаОвала"]));
+        assert(isEqualArrays(splitGroups(testResult2), ["#ПШ ", " #ГраницаОвала ", " #Мир ", " #ТокМой ", " #Я ", " #Он ", " #Кто"]));
+        assert(textToHashtag(testData) === testResult);
+        assert(textToHashtag(testData2) === testResult2);
+        assert(textToHashtag(testResult) === testResult);
+        assert(textToHashtag(testResult2) === testResult2);
+        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdff|asd sdf  dsdf  fg    ; , ds. dfg");
         assert(toCamelCase("новый год ") === "НовыйГод");
         assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");
         assert(toCamelCase("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");

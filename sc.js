@@ -27,7 +27,7 @@ function textToHashtag(x) {
     let a = removeUnwantedSpace(x);
     let m = removeSpecialChars(a);
     a = m;
-    let b = a.split(/[;,|\r\n]+/g);
+    let b = a.split(/[;,.|\r\n]+/g);
     let c = b.map(item => item.trim());
     let d = removeEmptyElements(c);
     let e = d.map(t => removeSpaces(t));

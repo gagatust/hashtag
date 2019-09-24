@@ -30,7 +30,7 @@ function textToHashtag(x) {
     let b = a.split(/[;,.|\r\n]+/g);
     let c = b.map(item => item.trim());
     let d = removeEmptyElements(c);
-    let e = d.map(t => removeSpaces(t));
+    let e = d.map(t => toCamelCase(t));
     let f = removeDuplicates(e);
     let g = wordListToHashTags(f);
     return g;
@@ -164,7 +164,7 @@ function test() {
         assert(wordListToHashTags(["Ток", "кот", "2019"]) === "#Ток | #кот | #2019");
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
-        assert(textToHashtag(testData) === "#ПШ | #Границаовала | #3 | #41 | #2 | #5 | #7 | #4");
+        assert(textToHashtag(testData) === "#ПШ | #ГраницаОвала | #3 | #41 | #2 | #5 | #7 | #4");
         assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg") === "sd fda adfd@35sdffasd sdf  dsdf  fg    ; , ds. dfg");
         assert(toCamelCase("новый год ") === "НовыйГод");
         assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");

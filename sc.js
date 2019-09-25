@@ -63,7 +63,7 @@ function getGroups(x) {
     let b = replaceSpecialCharsToDelimiter(a, ",");
     let c = splitGroups(b);
     let d = c.map(item => item.trim());
-    let e = d.map(item => removeStartedWithNumer(item));
+    let e = d.map(item => removeNumbers(item));
     let f = removeEmptyElements(e);
     let g = removeDuplicates(f);
     return g;
@@ -77,8 +77,8 @@ function removeDuplicateSpaces(x) {
     return x.replace(/ +(?= )/g, '');
 }
 
-function removeStartedWithNumer(x) {
-    return x.replace(/^[0-9].*/g, '');
+function removeNumbers(x) {
+    return x.replace(/^[\d ]+$/g, '');
 }
 
 function splitGroups(x) {
@@ -235,7 +235,8 @@ function test() {
         assert(textToHashtag("„Немецкие“ – имеют второе название - „развёрнутые лапки“")
                 === "#Немецкие | #ИмеютВтороеНазвание | #РазвёрнутыеЛапки");
         assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#Иногда | #Слово | #ЗаключаютВВерхниеРовныеСимволы");
-        assert(textToHashtag("5 человек") === "");
+        assert(textToHashtag("5 человек") === "#5Человек");
+        assert(textToHashtag(" 11 09 событие") === "#1109Событие");
         assert(textToHashtag(testDataSpecialChars) ===
                 "#Кто | #Здесь | #Вот | #И | @35 | #ОнОна | #Они | #Кот | #Видит | #Мышь | #Мы | #Или | #ТутНеРавно | #По | #В | #Ко | #От | #Во | #КемУ | #Тех | #Там | #D | #Fg");
 
@@ -251,10 +252,15 @@ function test() {
         assert(toCamelCase(" иркутск  и иркутская область   ключевые   слова\t должны быть ")
                 === "ИркутскИИркутскаяОбластьКлючевыеСловаДолжныБыть");
 
-        assert(removeStartedWithNumer("программа") === "программа");
-        assert(removeStartedWithNumer("123") === "");
-        assert(removeStartedWithNumer("123программа") === "");
-        assert(removeStartedWithNumer("программа123") === "программа123");
+        assert(removeNumbers("программа") === "программа");
+        assert(removeNumbers("123") === "");
+        assert(removeNumbers("1 3") === "");
+        assert(removeNumbers("1 ") === "");
+        assert(removeNumbers(" 1") === "");
+        assert(removeNumbers(" 1 78a") === " 1 78a");
+        assert(removeNumbers("1 a") === "1 a");
+        assert(removeNumbers("123программа") === "123программа");
+        assert(removeNumbers("программа123") === "программа123");
 
         assert(replaceQuotesAndBracketsToDelimiter("'wer'''", "0") === "0wer0");
 

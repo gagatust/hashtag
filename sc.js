@@ -2,6 +2,7 @@
 
 let dev = false;
 test();
+testTrace();
 
 fillSrcTextByUrlParams();
 
@@ -224,4 +225,7 @@ function test() {
 
         debug("finish test");
     }
+}
+
+function testTrace() {
 }

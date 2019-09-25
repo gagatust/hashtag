@@ -137,12 +137,12 @@ function toCamelCase(str) {
 }
 
 function replaceSpecialCharsToSpace(x) {
-    return x.replace(/[&–/\-\+\-\*]+/g, " ");
+    return x.replace(/[&/\+\-\*]+/g, " ");
 }
 
 function replaceSpecialCharsToDelimiter(x, d) {
     let a = replaceQuotesAndBracketsToDelimiter(x, d);
-    return a.replace(/[—%;:,#~=\\\.\?\!\|\^\$\r\n\t]+/g, d);
+    return a.replace(/[–—%;:,#~=\\\.\?\!\|\^\$\r\n\t]+/g, d);
 }
 
 function replaceQuotesAndBracketsToDelimiter(x, y) {

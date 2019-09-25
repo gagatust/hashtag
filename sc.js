@@ -203,6 +203,7 @@ function test() {
         assert(textToHashtag(testDataSpecialChars) ===
                 "#Кто | #Здесь | #Вот | #И | #@35 | #ОнОна | #Они | #Кот | #Видит | #Мышь | #Мы | #Или | #ТутНеРавно | #По | #В | #Ко | #От | #Во | #КемУ | #Тех | #Там | #D | #Fg");
 
+        assert(replaceSpecialCharsToDelimiter("Вот:пир,мир", ",") === "Вот,пир,мир");
         assert(replaceSpecialCharsToDelimiter(testDataSpecialChars, ",")
                 === "кто, здесь, вот,и,@35,он&она,они,кот,видит,мышь,мы,или,тут/ не+ равно, по,в,ко,от,во , кем *у ,  тех, кто, там, d,fg");
         assert(replaceSpecialCharsToSpace(testDataSpecialChars)

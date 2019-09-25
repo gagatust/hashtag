@@ -219,7 +219,7 @@ function test() {
         assert(removeStartedWithNumer("123программа") === "");
         assert(removeStartedWithNumer("программа123") === "программа123");
 
-        debug(replaceQuotesAndBracketsToDelimiter("'wer'''", "0"));
+        assert(replaceQuotesAndBracketsToDelimiter("'wer'''", "0") === "0wer0");
 
         debug("finish test");
     }

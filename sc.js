@@ -50,7 +50,7 @@ function removeStartedWithNumer(x) {
 }
 
 function splitGroups(x) {
-    return x.split(/[»«–—“„”’‘;,#\.\|\r\n]+/g);
+    return x.split(/[,]+/g);
 }
 
 function removeEmptyElements(x) {
@@ -190,9 +190,8 @@ function test() {
         let testResult2 = "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто";
         let testResult3 = "#УланУдэ | #КомсомольскНаАмуре | #НижнийТагил | #РостовНаДону | #МинеральныеВоды";
 
-        assert(isEqualArrays(splitGroups(testData), [" ПШ", "  Граница  овала ", " 3 ", "  4    1    ", "2  ", " 5 ", "  ", "7 ", " 4"]));
-        assert(isEqualArrays(splitGroups(testResult), ["", "ПШ ", " ", "ГраницаОвала"]));
-        assert(isEqualArrays(splitGroups(testResult2), ["", "ПШ ", " ", "ГраницаОвала ", " ", "Мир ", " ", "ТокМой ", " ", "Я ", " ", "Он ", " ", "Кто"]));
+        assert(isEqualArrays(splitGroups("Мир,труд, май"), ["Мир", "труд", " май"]));
+        assert(isEqualArrays(splitGroups("Мир,труд,, май"), ["Мир", "труд", " май"]));
 
         assert(textToHashtag(testData) === testResult);
         assert(textToHashtag(testData2) === testResult2);
@@ -208,7 +207,7 @@ function test() {
                 === "#Немецкие | #ИмеютВтороеНазвание | #РазвёрнутыеЛапки");
         assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#Иногда | #Слово | #ЗаключаютВВерхниеРовныеСимволы");
         assert(textToHashtag("5 человек") === "");
-        
+
         assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg")
                 === "sd fda adfd@35sdff|asd sdf  d#sdf  fg  #  ; , ds. dfg");
 

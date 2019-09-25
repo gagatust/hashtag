@@ -207,6 +207,8 @@ function test() {
         assert(textToHashtag("„Немецкие“ – имеют второе название - „развёрнутые лапки“")
                 === "#Немецкие | #ИмеютВтороеНазвание | #РазвёрнутыеЛапки");
         assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#Иногда | #Слово | #ЗаключаютВВерхниеРовныеСимволы");
+        assert(textToHashtag("5 человек") === "");
+        
         assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg")
                 === "sd fda adfd@35sdff|asd sdf  d#sdf  fg  #  ; , ds. dfg");
 

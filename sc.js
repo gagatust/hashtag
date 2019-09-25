@@ -104,8 +104,12 @@ function toCamelCase(str) {
 
 }
 
+function replaceSpecialChars(x, y) {
+    return x.replace(/[!?$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]/g, y);
+}
+
 function removeSpecialChars(x) {
-    return x.replace(/[!?$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]/g, "");
+    return replaceSpecialChars(x, "");
 }
 
 function isEqualArrays(x, y) {

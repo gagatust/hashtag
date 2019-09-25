@@ -100,16 +100,8 @@ function toCamelCase(str) {
 
 }
 
-function replaceSpecialChars(x, y) {
-    return x.replace(/[!?$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]+/g, y);
-}
-
-function removeSpecialChars(x) {
-    return replaceSpecialChars(x, "");
-}
-
 function replaceSpecialCharsToSpace(x) {
-    return x.replace(/[–\-\+\-\*]+/g, " ");
+    return x.replace(/[&–/\-\+\-\*]+/g, " ");
 }
 
 function replaceSpecialCharsToDelimiter(x, d) {
@@ -186,6 +178,7 @@ function test() {
 
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         let testData2 = " ПШ,  Граница  овала , мир ;  ток    мой    \n2  , я ,,  ,он , кто";
+        let testDataSpecialChars = "кто( здесь) вот[и][@35%он&она?они<кот>видит:мышь!мы|или\\тут/ не+ равно= по#в`ко~от\"во ^ кем *у #  тех; кто, там. d$fg";
         let testResult = "#ПШ | #ГраницаОвала";
         let testResult2 = "#ПШ | #ГраницаОвала | #Мир | #ТокМой | #Я | #Он | #Кто";
         let testResult3 = "#УланУдэ | #КомсомольскНаАмуре | #НижнийТагил | #РостовНаДону | #МинеральныеВоды";
@@ -207,9 +200,13 @@ function test() {
                 === "#Немецкие | #ИмеютВтороеНазвание | #РазвёрнутыеЛапки");
         assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#Иногда | #Слово | #ЗаключаютВВерхниеРовныеСимволы");
         assert(textToHashtag("5 человек") === "");
+        assert(textToHashtag(testDataSpecialChars) ===
+                "#Кто | #Здесь | #Вот | #И | #@35 | #ОнОна | #Они | #Кот | #Видит | #Мышь | #Мы | #Или | #ТутНеРавно | #По | #В | #Ко | #От | #Во | #КемУ | #Тех | #Там | #D | #Fg");
 
-        assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg")
-                === "sd fda adfd@35sdff|asd sdf  d#sdf  fg  #  ; , ds. dfg");
+        assert(replaceSpecialCharsToDelimiter(testDataSpecialChars, ",")
+                === "кто, здесь, вот,и,@35,он&она,они,кот,видит,мышь,мы,или,тут/ не+ равно, по,в,ко,от,во , кем *у ,  тех, кто, там, d,fg");
+        assert(replaceSpecialCharsToSpace(testDataSpecialChars)
+                === "кто( здесь) вот[и][@35%он она?они<кот>видит:мышь!мы|или\\тут  не  равно= по#в`ко~от\"во ^ кем  у #  тех; кто, там. d$fg");
 
         assert(toCamelCase("новый год ") === "НовыйГод");
         assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");

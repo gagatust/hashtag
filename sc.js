@@ -90,7 +90,7 @@ function removeEmptyElements(x) {
 }
 
 function addHashtag(x) {
-    return x.map(e => "#" + e);
+    return x.map(e => e.charAt(0) === "@" ? e : "#" + e);
 }
 
 function wordListToHashTags(x, delimiter = " | ") {
@@ -237,7 +237,7 @@ function test() {
         assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#Иногда | #Слово | #ЗаключаютВВерхниеРовныеСимволы");
         assert(textToHashtag("5 человек") === "");
         assert(textToHashtag(testDataSpecialChars) ===
-                "#Кто | #Здесь | #Вот | #И | #@35 | #ОнОна | #Они | #Кот | #Видит | #Мышь | #Мы | #Или | #ТутНеРавно | #По | #В | #Ко | #От | #Во | #КемУ | #Тех | #Там | #D | #Fg");
+                "#Кто | #Здесь | #Вот | #И | @35 | #ОнОна | #Они | #Кот | #Видит | #Мышь | #Мы | #Или | #ТутНеРавно | #По | #В | #Ко | #От | #Во | #КемУ | #Тех | #Там | #D | #Fg");
 
         assert(replaceSpecialCharsToDelimiter("Вот:пир,мир", ",") === "Вот,пир,мир");
         assert(replaceSpecialCharsToDelimiter(testDataSpecialChars, ",")
@@ -257,6 +257,8 @@ function test() {
         assert(removeStartedWithNumer("программа123") === "программа123");
 
         assert(replaceQuotesAndBracketsToDelimiter("'wer'''", "0") === "0wer0");
+
+        assert(isEqualArrays(addHashtag(["gj", "sf", "er@se", "@qw", "we", "as@j", "@w"]), ["#gj", "#sf", "#er@se", "@qw", "#we", "#as@j", "@w"]));
 
         debug("finish test");
     }

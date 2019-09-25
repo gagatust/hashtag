@@ -11,7 +11,7 @@ function fillSrcTextByUrlParams() {
     if (typeof requestParameter !== 'undefined') {
         debug("request parameters are exist");
         let srcTextEl = getById("srcText");
-        srcTextEl.textContent = requestParameter;
+        srcTextEl.textContent = requestParameter + "\n";
     }
 }
 

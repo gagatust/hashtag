@@ -21,6 +21,11 @@
                 font-size: 0.7rem;
                 margin-block-end: 0em;
             }
+            .support{
+                font-size: 0.7rem;
+                margin-block-start: 5em;
+                text-align: center;
+            }
         </style>
     </head>
 
@@ -37,12 +42,14 @@
                         <textarea class="form-control" id="srcText" rows="7"></textarea>
                     </div>
                 </form>
-                <button class="btn btn-primary" onclick="updateHashtag()">Создать</button>
+                <button class="btn btn-primary" onclick="updateHashtag()">Хэштеги</button>
+                <button class="btn btn-secondary" onclick="updateUrl()">Ссылка</button>
                 <p></p>
                 <label>Результат</label>
                 <div class="alert alert-primary" role="alert" id="dstText">&nbsp;</div>
+                <p class="support">Разработка и поддержка <a href="https://vk.com/penskikh_yuri" target="_blank">Юрий Пенских</a></p>
             </div>
         </main>
-        <script src="sc.js?v=1"></script>
+        <script src="sc.js?v=2"></script>
     </body>
 </html>

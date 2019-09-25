@@ -16,15 +16,48 @@ function fillSrcTextByUrlParams() {
 }
 
 function updateHashtag() {
-    let srcTextEl = getById("srcText");
-    let srcText = srcTextEl.value;
+    let srcText = getSrcText();
     let t = textToHashtag(srcText);
-    let dstTextEl = getById("dstText");
-    dstTextEl.textContent = t;
+    getDst().textContent = t;
     copyTextToClipboard(t);
 }
 
+function updateUrl() {
+    let srcText = getSrcText();
+    let t = textToUrl(srcText);
+    let a = '<a href="' + t + '">' + t + '</a>';
+    getDst().innerHTML = a;
+    copyTextToClipboard(t);
+}
+
+function getSrcText() {
+    let srcTextEl = getById("srcText");
+    let srcText = srcTextEl.value;
+    return srcText;
+}
+
+function getDst() {
+    return getById("dstText");
+}
+
 function textToHashtag(x) {
+    let g = getGroups(x);
+    let h = g.map(t => toCamelCase(t));
+    let i = wordListToHashTags(h);
+    return i;
+}
+
+function textToUrl(x) {
+    let g = getGroups(x);
+    let wordkeys = g.join(",");
+    let url = getUrlWithoutParameters();
+    if (wordkeys !== "") {
+        url += "?p=" + wordkeys;
+    }
+    return url;
+}
+
+function getGroups(x) {
     let y = replaceSpecialCharsToSpace(x);
     let a = removeUnwantedSpace(y);
     let b = replaceSpecialCharsToDelimiter(a, ",");
@@ -33,9 +66,7 @@ function textToHashtag(x) {
     let e = d.map(item => removeStartedWithNumer(item));
     let f = removeEmptyElements(e);
     let g = removeDuplicates(f);
-    let h = g.map(t => toCamelCase(t));
-    let i = wordListToHashTags(h);
-    return i;
+    return g;
 }
 
 function removeUnwantedSpace(x) {
@@ -87,6 +118,10 @@ function get(name) {
  */
 function getById(x) {
     return document.getElementById(x);
+}
+
+function getUrlWithoutParameters() {
+    return location.protocol + '//' + location.host + location.pathname;
 }
 
 function removeDuplicates(x) {

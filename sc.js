@@ -31,8 +31,8 @@ function textToHashtag(x) {
     let d = c.map(item => item.trim());
     let e = d.map(item => removeStartedWithNumer(item));
     let f = removeEmptyElements(e);
-    let g = f.map(t => toCamelCase(t));
-    let h = removeDuplicates(g);
+    let g = removeDuplicates(f);
+    let h = g.map(t => toCamelCase(t));
     let i = wordListToHashTags(h);
     return i;
 }

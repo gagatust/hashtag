@@ -24,9 +24,9 @@ function updateHashtag() {
 }
 
 function textToHashtag(x) {
-    let y = x.replace(/\-/g, ' ');
+    let y = replaceSpecialCharsToSpace(x);
     let a = removeUnwantedSpace(y);
-    let b = removeSpecialChars(a);
+    let b = replaceSpecialCharsToDelimiter(a, ",");
     let c = splitGroups(b);
     let d = c.map(item => item.trim());
     let e = d.map(item => removeStartedWithNumer(item));
@@ -92,10 +92,6 @@ function removeDuplicates(x) {
     return [...new Set(x)];
 }
 
-function removeSpaces(x) {
-    return x.replace(/[ \t]/g, '');
-}
-
 function toCamelCase(str) {
     return str
             .replace(/./, x => x.toUpperCase())
@@ -105,11 +101,24 @@ function toCamelCase(str) {
 }
 
 function replaceSpecialChars(x, y) {
-    return x.replace(/[!?$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]/g, y);
+    return x.replace(/[!?$%&~<>`'":=\\\^\?\[\]\(\)\{\}\+\-\*/]+/g, y);
 }
 
 function removeSpecialChars(x) {
     return replaceSpecialChars(x, "");
+}
+
+function replaceSpecialCharsToSpace(x) {
+    return x.replace(/[–\-\+\-\*]+/g, " ");
+}
+
+function replaceSpecialCharsToDelimiter(x, d) {
+    let a = replaceQuotesAndBracketsToDelimiter(x, d);
+    return a.replace(/[—%;:,#~=\\\.\?\!\|\^\$\r\n\t]+/g, d);
+}
+
+function replaceQuotesAndBracketsToDelimiter(x, y) {
+    return x.replace(/[`'"»«“„”’‘<>\[\]\(\)\{\}]+/g, y);
 }
 
 function isEqualArrays(x, y) {
@@ -197,7 +206,7 @@ function test() {
                 === "#АнглийскиеДвойные | #Или | #Одиночные | #ИзвестныКак | #Лапки | #РасположенныеВВерхнейЧасти");
         assert(textToHashtag("„Немецкие“ – имеют второе название - „развёрнутые лапки“")
                 === "#Немецкие | #ИмеютВтороеНазвание | #РазвёрнутыеЛапки");
-        assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#ИногдаСловоЗаключаютВВерхниеРовныеСимволы");
+        assert(textToHashtag('Иногда "слово" заключают в верхние ровные символы.') === "#Иногда | #Слово | #ЗаключаютВВерхниеРовныеСимволы");
         assert(removeSpecialChars("sd( fda) adf[d][@35%&?<>:sdf!f|\\asd/ sdf+ = d#`~sdf\" ^ fg * #  ; , ds. d$fg")
                 === "sd fda adfd@35sdff|asd sdf  d#sdf  fg  #  ; , ds. dfg");
 
@@ -211,6 +220,8 @@ function test() {
         assert(removeStartedWithNumer("123") === "");
         assert(removeStartedWithNumer("123программа") === "");
         assert(removeStartedWithNumer("программа123") === "программа123");
+
+        debug(replaceQuotesAndBracketsToDelimiter("'wer'''", "0"));
 
         debug("finish test");
     }

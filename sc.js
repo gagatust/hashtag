@@ -142,7 +142,7 @@ function replaceSpecialCharsToSpace(x) {
 
 function replaceSpecialCharsToDelimiter(x, d) {
     let a = replaceQuotesAndBracketsToDelimiter(x, d);
-    return a.replace(/[–—%;:,#~=\\\.\?\!\|\^\$\r\n\t]+/g, d);
+    return a.replace(/[–—−‒―%;:,#~=\\\.\?\!\|\^\$\r\n\t]+/g, d);
 }
 
 function replaceQuotesAndBracketsToDelimiter(x, y) {
@@ -243,6 +243,9 @@ function test() {
         assert(replaceSpecialCharsToDelimiter("Вот:пир,мир", ",") === "Вот,пир,мир");
         assert(replaceSpecialCharsToDelimiter(testDataSpecialChars, ",")
                 === "кто, здесь, вот,и,@35,он&она,они,кот,видит,мышь,мы,или,тут/ не+ равно, по,в,ко,от,во , кем *у ,  тех, кто, там, d,fg");
+        assert(replaceSpecialCharsToDelimiter("я–мы—он−она‒они―ты", ",")
+                === "я,мы,он,она,они,ты");
+
         assert(replaceSpecialCharsToSpace(testDataSpecialChars)
                 === "кто( здесь) вот[и][@35%он она?они<кот>видит:мышь!мы|или\\тут  не  равно= по#в`ко~от\"во ^ кем  у #  тех; кто, там. d$fg");
 

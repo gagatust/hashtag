@@ -10,8 +10,7 @@ function fillSrcTextByUrlParams() {
     let requestParameter = get("p");
     if (typeof requestParameter !== 'undefined') {
         debug("request parameters are exist");
-        let srcTextEl = getById("srcText");
-        srcTextEl.textContent = requestParameter + "\n";
+        getSrc().textContent = requestParameter + "\n";
     }
 }
 
@@ -31,9 +30,11 @@ function updateUrl() {
 }
 
 function getSrcText() {
-    let srcTextEl = getById("srcText");
-    let srcText = srcTextEl.value;
-    return srcText;
+    return getSrc().value;
+}
+
+function getSrc() {
+    return getById("srcText");
 }
 
 function getDst() {

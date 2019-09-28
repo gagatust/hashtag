@@ -6,6 +6,7 @@ testTrace();
 
 fillSrcTextByUrlParams();
 let delimiter = " | ";
+let toSingleWord = getToSingleWord(0);
 
 function fillSrcTextByUrlParams() {
     let requestParameter = get("p");
@@ -17,7 +18,7 @@ function fillSrcTextByUrlParams() {
 
 function updateHashtag() {
     let srcText = getSrcText();
-    let t = textToHashtag(srcText, delimiter);
+    let t = textToHashtag(srcText, delimiter, toSingleWord);
     getDst().textContent = t;
     copyTextToClipboard(t);
 }
@@ -42,9 +43,9 @@ function getDst() {
     return getById("dstText");
 }
 
-function textToHashtag(x, delimiter = " | ") {
+function textToHashtag(x, delimiter = " | ", toSingleWord = toCamelCaseClass) {
     let g = getGroups(x);
-    let h = g.map(t => toCamelCaseClass(t));
+    let h = g.map(t => toSingleWord(t));
     let i = wordListToHashTags(h, delimiter);
     return i;
 }
@@ -57,6 +58,16 @@ function textToUrl(x) {
         url += "?p=" + wordkeys;
     }
     return url;
+}
+
+function getToSingleWord(x) {
+    switch (x) {
+        case 0:
+            return toCamelCaseClass;
+        case 1:
+            return toCamelCaseVariable;
+    }
+    return toCamelCaseClass;
 }
 
 function getGroups(x) {
@@ -272,6 +283,10 @@ function test() {
         assert(toCamelCaseVariable("новый год ") === "новыйГод");
         assert(toCamelCaseVariable("хэштег генератор") === "хэштегГенератор");
         assert(toCamelCaseVariable("программа  по генерации хэштегов") === "программаПоГенерацииХэштегов");
+
+        assert(getToSingleWord(0).name === "toCamelCaseClass");
+        assert(getToSingleWord(1).name === "toCamelCaseVariable");
+        assert(getToSingleWord(8).name === "toCamelCaseClass");
 
         assert(removeNumbers("программа") === "программа");
         assert(removeNumbers("123") === "");

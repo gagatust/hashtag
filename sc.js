@@ -5,6 +5,7 @@ test();
 testTrace();
 
 fillSrcTextByUrlParams();
+let delimiter = " | ";
 
 function fillSrcTextByUrlParams() {
     let requestParameter = get("p");
@@ -16,7 +17,7 @@ function fillSrcTextByUrlParams() {
 
 function updateHashtag() {
     let srcText = getSrcText();
-    let t = textToHashtag(srcText);
+    let t = textToHashtag(srcText, delimiter);
     getDst().textContent = t;
     copyTextToClipboard(t);
 }
@@ -41,10 +42,10 @@ function getDst() {
     return getById("dstText");
 }
 
-function textToHashtag(x) {
+function textToHashtag(x, delimiter = " | ") {
     let g = getGroups(x);
     let h = g.map(t => toCamelCase(t));
-    let i = wordListToHashTags(h);
+    let i = wordListToHashTags(h, delimiter);
     return i;
 }
 
@@ -94,7 +95,7 @@ function addHashtag(x) {
     return x.map(e => e.charAt(0) === "@" ? e : "#" + e);
 }
 
-function wordListToHashTags(x, delimiter = " | ") {
+function wordListToHashTags(x, delimiter) {
     return addHashtag(x).join(delimiter);
 }
 
@@ -215,7 +216,8 @@ function test() {
         assert(isEqualArrays(removeDuplicates(["qw", "Qw", "io"]), ["Qw", "io"]));
         assert(isEqualArrays(removeDuplicates(["qw", "qw", "io"]), ["qw", "io"]));
 
-        assert(wordListToHashTags(["Ток", "кот", "2019"]) === "#Ток | #кот | #2019");
+        assert(wordListToHashTags(["Ток", "кот", "2019"], " | ") === "#Ток | #кот | #2019");
+        assert(wordListToHashTags(["Ток", "кот", "2019"], " ") === "#Ток #кот #2019");
 
         let testData = " ПШ,  Граница  овала , 3 ;  4    1    \n2  , 5 ,,  ,7 , 4";
         let testData2 = " ПШ,  Граница  овала , мир ;  ток    мой    \n2  , я ,,  ,он , кто";
@@ -244,6 +246,9 @@ function test() {
         assert(textToHashtag(" 11 09 событие") === "#1109Событие");
         assert(textToHashtag(testDataSpecialChars) ===
                 "#Кто | #Здесь | #Вот | #И | @35 | #ОнОна | #Они | #Кот | #Видит | #Мышь | #Мы | #Или | #ТутНеРавно | #По | #В | #Ко | #От | #Во | #КемУ | #Тех | #Там | #D | #Fg");
+        assert(textToHashtag("вам, тебе") === "#Вам | #Тебе");
+        assert(textToHashtag("вам, тебе", " ") === "#Вам #Тебе");
+        assert(textToHashtag("вам, тебе", ", ") === "#Вам, #Тебе");
 
         assert(replaceSpecialCharsToDelimiter("Вот:пир,мир", ",") === "Вот,пир,мир");
         assert(replaceSpecialCharsToDelimiter(testDataSpecialChars, ",")

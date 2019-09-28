@@ -44,7 +44,7 @@ function getDst() {
 
 function textToHashtag(x, delimiter = " | ") {
     let g = getGroups(x);
-    let h = g.map(t => toCamelCase(t));
+    let h = g.map(t => toCamelCaseClass(t));
     let i = wordListToHashTags(h, delimiter);
     return i;
 }
@@ -132,12 +132,16 @@ function removeDuplicates(x) {
     return [...map.values()];
 }
 
-function toCamelCase(str) {
+function toCamelCaseClass(str) {
+    return toCamelCaseVariable(
+            str.replace(/./, x => x.toUpperCase())
+            );
+}
+
+function toCamelCaseVariable(str) {
     return str
-            .replace(/./, x => x.toUpperCase())
             .replace(/\s+./g, x => x.toUpperCase())
             .replace(/\s/g, '');
-
 }
 
 function replaceSpecialCharsToSpace(x) {
@@ -259,11 +263,15 @@ function test() {
         assert(replaceSpecialCharsToSpace(testDataSpecialChars)
                 === "кто( здесь) вот[и][@35%он она?они<кот>видит:мышь!мы|или\\тут  не  равно= по#в`ко~от\"во ^ кем  у #  тех; кто, там. d$fg");
 
-        assert(toCamelCase("новый год ") === "НовыйГод");
-        assert(toCamelCase("хэштег генератор") === "ХэштегГенератор");
-        assert(toCamelCase("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");
-        assert(toCamelCase(" иркутск  и иркутская область   ключевые   слова\t должны быть ")
+        assert(toCamelCaseClass("новый год ") === "НовыйГод");
+        assert(toCamelCaseClass("хэштег генератор") === "ХэштегГенератор");
+        assert(toCamelCaseClass("программа  по генерации хэштегов") === "ПрограммаПоГенерацииХэштегов");
+        assert(toCamelCaseClass(" иркутск  и иркутская область   ключевые   слова\t должны быть ")
                 === "ИркутскИИркутскаяОбластьКлючевыеСловаДолжныБыть");
+
+        assert(toCamelCaseVariable("новый год ") === "новыйГод");
+        assert(toCamelCaseVariable("хэштег генератор") === "хэштегГенератор");
+        assert(toCamelCaseVariable("программа  по генерации хэштегов") === "программаПоГенерацииХэштегов");
 
         assert(removeNumbers("программа") === "программа");
         assert(removeNumbers("123") === "");

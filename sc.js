@@ -126,7 +126,9 @@ function getUrlWithoutParameters() {
 }
 
 function removeDuplicates(x) {
-    return [...new Set(x)];
+    let array = x.map(t => [t.toString().toLowerCase(), t]);
+    let map = new Map(array);
+    return [...map.values()];
 }
 
 function toCamelCase(str) {
@@ -210,6 +212,8 @@ function test() {
 
         assert(isEqualArrays(removeDuplicates([1, 6, 5, 6, 5, 1]), [1, 6, 5]));
         assert(isEqualArrays(removeDuplicates(["пш", 6, 5, "пш", 5, "кот"]), ["пш", 6, 5, "кот"]));
+        assert(isEqualArrays(removeDuplicates(["qw", "Qw", "io"]), ["Qw", "io"]));
+        assert(isEqualArrays(removeDuplicates(["qw", "qw", "io"]), ["qw", "io"]));
 
         assert(wordListToHashTags(["Ток", "кот", "2019"]) === "#Ток | #кот | #2019");
 

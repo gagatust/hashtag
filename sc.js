@@ -4,16 +4,24 @@ let dev = false;
 test();
 testTrace();
 
+let delimiter;
+let toSingleWord;
+let delimiterCode = getSafeIntUrlParams("d");
+let toSingleWordCode = getSafeIntUrlParams("w");
 fillSrcTextByUrlParams();
-let delimiter = " | ";
-let toSingleWord = getToSingleWord(0);
+updateGlobalParams();
 
 function fillSrcTextByUrlParams() {
-    let requestParameter = get("p");
-    if (typeof requestParameter !== 'undefined') {
-        debug("request parameters are exist");
-        getSrc().textContent = requestParameter + "\n";
+    let requestParameter = getSafeUrlParams("p");
+    if (requestParameter !== "") {
+        requestParameter += "\n";
     }
+    getSrc().textContent = requestParameter;
+}
+
+function updateGlobalParams() {
+    delimiter = getDelimiter(delimiterCode);
+    toSingleWord = getToSingleWord(toSingleWordCode);
 }
 
 function updateHashtag() {
@@ -70,6 +78,16 @@ function getToSingleWord(x) {
     return toCamelCaseClass;
 }
 
+function getDelimiter(x) {
+    switch (x) {
+        case 0:
+            return " ";
+        case 1:
+            return " | ";
+    }
+    return " | ";
+}
+
 function getGroups(x) {
     let y = replaceSpecialCharsToSpace(x);
     let a = removeUnwantedSpace(y);
@@ -112,12 +130,25 @@ function wordListToHashTags(x, delimiter) {
 
 //Base methods
 
+function getSafeIntUrlParams(paramName) {
+    return parseInt(getSafeUrlParams(paramName));
+}
+
+function getSafeUrlParams(paramName) {
+    let param = getUrlParams(paramName);
+    if (typeof param !== 'undefined') {
+        debug(paramName + " parameter is set: " + param);
+        return param;
+    }
+    return "";
+}
+
 /**
  * Получить параметр из utl
  * @param {string} name имя параметра
  * @returns {string}
  */
-function get(name) {
+function getUrlParams(name) {
     name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search);
     if (name) {
         return decodeURIComponent(name[1]);

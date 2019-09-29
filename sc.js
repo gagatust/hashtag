@@ -130,8 +130,8 @@ function wordListToHashTags(x, delimiter) {
 
 //Base methods
 
-function getSafeIntUrlParams(paramName) {
-    return parseInt(getSafeUrlParams(paramName));
+function getSafeIntUrlParams(paramName, defaultValue = 0) {
+    return toIntSafe(getSafeUrlParams(paramName), defaultValue);
 }
 
 function getSafeUrlParams(paramName) {
@@ -153,6 +153,11 @@ function getUrlParams(name) {
     if (name) {
         return decodeURIComponent(name[1]);
     }
+}
+
+function toIntSafe(x, defaultValue = 0) {
+    let y = parseInt(x);
+    return isNaN(y) ? defaultValue : y;
 }
 
 /**
@@ -261,6 +266,12 @@ function test() {
         assert(isEqualArrays(removeDuplicates(["пш", 6, 5, "пш", 5, "кот"]), ["пш", 6, 5, "кот"]));
         assert(isEqualArrays(removeDuplicates(["qw", "Qw", "io"]), ["Qw", "io"]));
         assert(isEqualArrays(removeDuplicates(["qw", "qw", "io"]), ["qw", "io"]));
+
+        assert(toIntSafe("1", 7) === 1);
+        assert(toIntSafe("1") === 1);
+        assert(toIntSafe("") === 0);
+        assert(toIntSafe("", 7) === 7);
+        assert(toIntSafe("w", 7) === 7);
 
         assert(wordListToHashTags(["Ток", "кот", "2019"], " | ") === "#Ток | #кот | #2019");
         assert(wordListToHashTags(["Ток", "кот", "2019"], " ") === "#Ток #кот #2019");

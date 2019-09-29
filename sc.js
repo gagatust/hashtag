@@ -6,8 +6,10 @@ testTrace();
 
 let delimiter;
 let toSingleWord;
-setSelectedIndexSafe(getDelimiterStyleSelectComponent(), getSafeIntUrlParams("d", 1));
-setSelectedIndexSafe(getWordStyleSelectComponent(), getSafeIntUrlParams("w", 2));
+let defaultDelimiterStyleIndex = 1;
+let defaultWordStyleIndex = 2;
+setSelectedIndexSafe(getDelimiterStyleSelectComponent(), getSafeIntUrlParams("d", defaultDelimiterStyleIndex));
+setSelectedIndexSafe(getWordStyleSelectComponent(), getSafeIntUrlParams("w", defaultWordStyleIndex));
 updateStyleParams();
 fillSrcTextByUrlParams();
 

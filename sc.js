@@ -6,8 +6,8 @@ testTrace();
 
 let delimiter;
 let toSingleWord;
-getDelimiterStyleSelectComponent().selectedIndex = getSafeIntUrlParams("d", 1);
-getWordStyleSelectComponent().selectedIndex = getSafeIntUrlParams("w", 2);
+setSelectedIndexSafe(getDelimiterStyleSelectComponent(), getSafeIntUrlParams("d", 1));
+setSelectedIndexSafe(getWordStyleSelectComponent(), getSafeIntUrlParams("w", 2));
 updateStyleParams();
 fillSrcTextByUrlParams();
 
@@ -22,6 +22,13 @@ function fillSrcTextByUrlParams() {
 function updateStyleParams() {
     delimiter = getDelimiter(getDelimiterStyleSelectComponent().selectedIndex);
     toSingleWord = getToSingleWord(getWordStyleSelectComponent().selectedIndex);
+}
+
+function setSelectedIndexSafe(component, x) {
+    let isValide = (x >= 0) && (x < component.length);
+    if (isValide) {
+        component.selectedIndex = x;
+    }
 }
 
 function updateHashtag() {

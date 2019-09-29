@@ -209,7 +209,7 @@ function getUrlWithoutParameters() {
 function removeDuplicates(x) {
     let array = x.map(t => [t.toString().toLowerCase(), t]);
     let map = new Map(array);
-    return [...map.values()];
+    return Array.from(map.values());
 }
 
 function toSimple(str) {

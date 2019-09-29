@@ -6,10 +6,10 @@ testTrace();
 
 let delimiter;
 let toSingleWord;
-let delimiterCode = getSafeIntUrlParams("d");
-let toSingleWordCode = getSafeIntUrlParams("w");
+getDelimiterStyleSelectComponent().selectedIndex = getSafeIntUrlParams("d", 1);
+getWordStyleSelectComponent().selectedIndex = getSafeIntUrlParams("w", 2);
+updateStyleParams();
 fillSrcTextByUrlParams();
-updateGlobalParams();
 
 function fillSrcTextByUrlParams() {
     let requestParameter = getSafeUrlParams("p");
@@ -19,9 +19,9 @@ function fillSrcTextByUrlParams() {
     getSrc().textContent = requestParameter;
 }
 
-function updateGlobalParams() {
-    delimiter = getDelimiter(delimiterCode);
-    toSingleWord = getToSingleWord(toSingleWordCode);
+function updateStyleParams() {
+    delimiter = getDelimiter(getDelimiterStyleSelectComponent().selectedIndex);
+    toSingleWord = getToSingleWord(getWordStyleSelectComponent().selectedIndex);
 }
 
 function updateHashtag() {
@@ -51,6 +51,14 @@ function getDst() {
     return getById("dstText");
 }
 
+function getDelimiterStyleSelectComponent() {
+    return getById("delimiterStyle");
+}
+
+function getWordStyleSelectComponent() {
+    return getById("wordStyle");
+}
+
 function textToHashtag(x, delimiter = " | ", toSingleWord = toCamelCaseClass) {
     let g = getGroups(x);
     let h = g.map(t => toSingleWord(t));
@@ -71,9 +79,11 @@ function textToUrl(x) {
 function getToSingleWord(x) {
     switch (x) {
         case 0:
-            return toCamelCaseClass;
+            return toSimple;
         case 1:
             return toCamelCaseVariable;
+        case 2:
+            return toCamelCaseClass;
     }
     return toCamelCaseClass;
 }
@@ -177,6 +187,12 @@ function removeDuplicates(x) {
     let array = x.map(t => [t.toString().toLowerCase(), t]);
     let map = new Map(array);
     return [...map.values()];
+}
+
+function toSimple(str) {
+    return str
+            .replace(/\s+./g, x => x)
+            .replace(/\s/g, '');
 }
 
 function toCamelCaseClass(str) {
@@ -326,8 +342,9 @@ function test() {
         assert(toCamelCaseVariable("хэштег генератор") === "хэштегГенератор");
         assert(toCamelCaseVariable("программа  по генерации хэштегов") === "программаПоГенерацииХэштегов");
 
-        assert(getToSingleWord(0).name === "toCamelCaseClass");
+        assert(getToSingleWord(0).name === "toSimple");
         assert(getToSingleWord(1).name === "toCamelCaseVariable");
+        assert(getToSingleWord(2).name === "toCamelCaseClass");
         assert(getToSingleWord(8).name === "toCamelCaseClass");
 
         assert(removeNumbers("программа") === "программа");

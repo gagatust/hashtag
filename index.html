@@ -42,6 +42,23 @@
                         <textarea class="form-control" id="srcText" rows="7"></textarea>
                     </div>
                 </form>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="delimiterStyle">Разделитель хэштегов</label>                            
+                        <select class="form-control" id="delimiterStyle" onchange="updateStyleParams()">
+                            <option>Пробел</option>
+                            <option>Вертикальная черта</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="wordStyle">Стиль соединения слов</label>
+                        <select class="form-control" id="wordStyle" onchange="updateStyleParams()">
+                            <option>простой</option>                            
+                            <option>верблюжийСМаленькойБуквы</option>
+                            <option>ВерблюжийCБольшойБуквы</option>
+                        </select>
+                    </div>
+                </div>
                 <button class="btn btn-primary" onclick="updateHashtag()">Хэштеги</button>
                 <button class="btn btn-secondary" onclick="updateUrl()">Ссылка</button>
                 <p></p>

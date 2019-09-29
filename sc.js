@@ -79,8 +79,14 @@ function textToUrl(x) {
     let g = getGroups(x);
     let wordkeys = g.join(",");
     let url = getUrlWithoutParameters();
-    if (wordkeys !== "") {
-        url += "?p=" + wordkeys;
+    let delimiterStyleIndex = getDelimiterStyleSelectComponent().selectedIndex;
+    let wordStyleIndex = getWordStyleSelectComponent().selectedIndex;
+    let delimiterParam = (delimiterStyleIndex === defaultDelimiterStyleIndex) ? "" : "d=" + delimiterStyleIndex;
+    let wordStyleParam = (wordStyleIndex === defaultWordStyleIndex) ? "" : "w=" + wordStyleIndex;
+    let wordKeyParam = (wordkeys === "") ? "" : "p=" + wordkeys;
+    let params = [delimiterParam, wordStyleParam, wordKeyParam].filter(x => x !== "").join("&");
+    if (params !== "") {
+        url += "?" + params;
     }
     return url;
 }

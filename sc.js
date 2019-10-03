@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * @author Yuri Penskikh
+ */
 
 let dev = false;
 test();
@@ -259,6 +262,9 @@ function debugAsJson(x) {
     console.log(JSON.stringify(x));
 }
 
+/**
+ * From https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+ */
 function copyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.style.position = 'fixed';

@@ -110,6 +110,8 @@ function getToSingleWord(x) {
             return toCamelCaseVariable;
         case 2:
             return toCamelCaseClass;
+        case 3:
+            return toSnake;
     }
     return toCamelCaseClass;
 }
@@ -231,6 +233,12 @@ function toCamelCaseVariable(str) {
     return str
             .replace(/\s+./g, x => x.toUpperCase())
             .replace(/\s/g, '');
+}
+
+function toSnake(str) {
+    return str
+            .replace(/\s+./g, x => x)
+            .replace(/\s/g, '_');
 }
 
 function replaceSpecialCharsToSpace(x) {
@@ -370,9 +378,14 @@ function test() {
         assert(toCamelCaseVariable("хэштег генератор") === "хэштегГенератор");
         assert(toCamelCaseVariable("программа  по генерации хэштегов") === "программаПоГенерацииХэштегов");
 
+        assert(toSnake("новый год") === "новый_год");
+        assert(toSnake("хэштег генератор") === "хэштег_генератор");
+        assert(toSnake("программа по генерации хэштегов") === "программа_по_генерации_хэштегов");
+
         assert(getToSingleWord(0).name === "toSimple");
         assert(getToSingleWord(1).name === "toCamelCaseVariable");
         assert(getToSingleWord(2).name === "toCamelCaseClass");
+        assert(getToSingleWord(3).name === "toSnake");
         assert(getToSingleWord(8).name === "toCamelCaseClass");
 
         assert(removeNumbers("программа") === "программа");

@@ -9,10 +9,13 @@ testTrace();
 
 let delimiter;
 let toSingleWord;
+let isSmall;
 let defaultDelimiterStyleIndex = 1;
 let defaultWordStyleIndex = 2;
+let defaultSmallStyleIndex = 0;
 setSelectedIndexSafe(getDelimiterStyleSelectComponent(), getSafeIntUrlParams("d", defaultDelimiterStyleIndex));
 setSelectedIndexSafe(getWordStyleSelectComponent(), getSafeIntUrlParams("w", defaultWordStyleIndex));
+getSmallStyleCheckboxComponent().checked = !!getSafeIntUrlParams("s", defaultSmallStyleIndex);
 updateStyleParams();
 fillSrcTextByUrlParams();
 
@@ -27,6 +30,7 @@ function fillSrcTextByUrlParams() {
 function updateStyleParams() {
     delimiter = getDelimiter(getDelimiterStyleSelectComponent().selectedIndex);
     toSingleWord = getToSingleWord(getWordStyleSelectComponent().selectedIndex);
+    isSmall = getSmallStyleCheckboxComponent().checked;
 }
 
 function setSelectedIndexSafe(component, x) {
@@ -60,7 +64,11 @@ function showExample() {
 }
 
 function getSrcText() {
-    return getSrc().value;
+    let result = getSrc().value;
+    if (isSmall) {
+        return result.toLowerCase();
+    }
+    return result;
 }
 
 function getSrc() {
@@ -79,6 +87,10 @@ function getWordStyleSelectComponent() {
     return getById("wordStyle");
 }
 
+function getSmallStyleCheckboxComponent() {
+    return getById("smallStyle");
+}
+
 function textToHashtag(x, delimiter = " | ", toSingleWord = toCamelCaseClass) {
     let g = getGroups(x);
     let h = g.map(t => toSingleWord(t));
@@ -92,10 +104,12 @@ function textToUrl(x) {
     let url = getUrlWithoutParameters();
     let delimiterStyleIndex = getDelimiterStyleSelectComponent().selectedIndex;
     let wordStyleIndex = getWordStyleSelectComponent().selectedIndex;
+    let smallStyleIndex = +getSmallStyleCheckboxComponent().checked;
     let delimiterParam = (delimiterStyleIndex === defaultDelimiterStyleIndex) ? "" : "d=" + delimiterStyleIndex;
     let wordStyleParam = (wordStyleIndex === defaultWordStyleIndex) ? "" : "w=" + wordStyleIndex;
+    let smallStyleParam = (smallStyleIndex === defaultSmallStyleIndex) ? "" : "s=" + smallStyleIndex;
     let wordKeyParam = (wordkeys === "") ? "" : "p=" + wordkeys;
-    let params = [delimiterParam, wordStyleParam, wordKeyParam].filter(x => x !== "").join("&");
+    let params = [delimiterParam, wordStyleParam, smallStyleParam, wordKeyParam].filter(x => x !== "").join("&");
     if (params !== "") {
         url += "?" + params;
     }

@@ -27,6 +27,10 @@
                 margin-block-start: 5em;
                 text-align: center;
             }
+
+            #smallStyleBlock{
+                margin-block-end: 1em;
+            }
         </style>
     </head>
 
@@ -37,12 +41,14 @@
                     <h1>Хэштег генератор</h1>
                     <p class="lead">Ключевые слова разделяются запятыми или абзацем.<br>Результат автоматически копируется в буфер обмена.</p>
                 </div>
-                <form>
-                    <div class ="form-group">
-                        <label for="srcText">Ключевые слова</label>
-                        <textarea class="form-control" id="srcText" rows="7"></textarea>
-                    </div>
-                </form>
+                <div class ="form-group">
+                    <label for="srcText">Ключевые слова</label>
+                    <textarea class="form-control" id="srcText" rows="7"></textarea>
+                </div>
+                <div class="custom-control custom-switch" id="smallStyleBlock">                    
+                    <input type="checkbox" class="custom-control-input" id="smallStyle" onchange="updateStyleParams()">
+                    <label class="custom-control-label" for="smallStyle">Преобразовывать ключевые слова в строчные</label>
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="delimiterStyle">Разделитель хэштегов</label>                            
@@ -70,6 +76,6 @@
                 <p class="support">Разработка и поддержка <a href="https://vk.com/penskikh_yuri" target="_blank">Юрий Пенских</a></p>
             </div>
         </main>
-        <script src="sc.js?v=5"></script>
+        <script src="sc.js?v=6"></script>
     </body>
 </html>

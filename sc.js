@@ -382,6 +382,11 @@ function test() {
         assert(toSnake("хэштег генератор") === "хэштег_генератор");
         assert(toSnake("программа по генерации хэштегов") === "программа_по_генерации_хэштегов");
 
+        assert(isEqualArrays(getGroups("новый год "), ["новый год"]));
+        assert(isEqualArrays(getGroups("хэштег генератор"), ["хэштег генератор"]));
+        assert(isEqualArrays(getGroups("программа  по генерации хэштегов"), ["программа по генерации хэштегов"]));
+        assert(isEqualArrays(getGroups(" иркутск  и иркутская область   ключевые   слова\t должны быть"), ["иркутск и иркутская область ключевые слова", "должны быть"]));
+
         assert(getToSingleWord(0).name === "toSimple");
         assert(getToSingleWord(1).name === "toCamelCaseVariable");
         assert(getToSingleWord(2).name === "toCamelCaseClass");
